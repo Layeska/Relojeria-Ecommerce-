@@ -116,7 +116,9 @@ themeButton.addEventListener('click', () => {
 
     localStorage.setItem('selected-theme', getCurrentTheme());
     localStorage.setItem('selected-icon', getCurrentIcon());
-})
+});
+
+//------------------------------------------------------------------------------------------------------------------------------------
 
 //! Logica del carrito de compras
 const base_datos = [
