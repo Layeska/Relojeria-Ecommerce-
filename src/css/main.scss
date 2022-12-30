@@ -1,0 +1,22 @@
+@import "./config/variables";
+
+@import "./base/base";
+
+@import "./layout/layout";
+
+@import "./components/header";
+@import "./components/home";
+@import "./components/botones";
+@import "./components/featured";
+@import "./components/story";
+@import "./components/products";
+@import "./components/testimonial";
+@import "./components/new";
+@import "./components//newsletter";
+@import "./components/footer";
+@import "./components/scrollUp";
+@import "./components/cart";
+@import "./components/details";
+
+@import "./theme/theme";
+@import "./components/breakpoints";
