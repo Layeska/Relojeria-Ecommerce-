@@ -185,9 +185,20 @@ let counterTotal = 0;
 const divCarrito = document.querySelector("#featured");
 const cartItems = document.querySelector(".cart__container");
 let totalPago = document.querySelector(".cart__prices-total");
+let totalItem = document.querySelector(".cart__prices-item");
 let counter = document.querySelector(".nav__shop-counter");
 
 loadEvents();
+
+const vacio = () => {
+    if(counterTotal === 0) {
+        cartItems.innerHTML = "No hay productos en el carrito! 😓";
+    }
+
+    totalItem.innerHTML = `${counterTotal} productos`;
+};
+
+vacio();
 
 function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
@@ -201,22 +212,19 @@ function borrarProducto(e) {
         const deleteProduct = e.target.getAttribute("id");
         carrito.forEach(item => {
             if(item.id == deleteProduct) {
-                //console.log(item.precio);
-                //console.log(parseFloat(item.cantidad));
                 let precioParse = item.precio.slice(1);
-                //console.log(precioParse);
+
                 let precioReducido = parseFloat(precioParse.slice(1)) * parseFloat(item.cantidad);
                 totalCard = totalCard + precioReducido;
                 totalCard = parseFloat(totalCard);
                 totalCard = totalCard.toFixed(2);
-                //console.log("TOTAL CARD: ", totalCard);
-                //totalCard = parseFloat(totalCard.toFixed(2));
             }
         });
         carrito = carrito.filter(product => product.id !== deleteProduct);
         counterTotal--;
     }
     cargarHTML();
+    vacio();
 };
 
 
@@ -227,6 +235,7 @@ function agregarProducto(e) {
         let productoSelecionado = e.target.parentElement;
         leerContenido(productoSelecionado);
     }
+    vacio();
 };
 
 
@@ -239,14 +248,9 @@ function leerContenido(producto) {
         cantidad: 1
     };
 
-    //console.log(totalCard);
     let precioDespejado= dataProducto.precio.slice(1);
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
-    //console.log(dataProducto.precio.slice(1)); //.substring(1)
     totalCard = totalCard.toFixed(2);
-    //console.log(totalCard);
-    //console.log(parseFloat(totalCard) + parseFloat(dataProducto.precio));
-    //console.log("Total parseado: ", totalCard);
 
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
@@ -309,6 +313,7 @@ function cargarHTML() {
         console.log("TOTAL: ", totalCard);
         totalPago.innerHTML = `$ ${parseFloat(totalCard)}`;
         counter.innerHTML = counterTotal;
+        totalItem.innerHTML = `${counterTotal} productos`;
     });
 };
 
