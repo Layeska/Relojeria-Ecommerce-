@@ -787,6 +787,7 @@ header {
   margin-top: 6rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .cart__prices-item {
   font-size: var(--small-font-size);
