@@ -178,20 +178,141 @@ const base_datos = [
     }
 ];
 
-function ver(){
-    window.open("../pages/details.html", '_blank');
-}
+let carrito = [];
+let totalCard = 0;
+let counterTotal = 0;
 
-/*let carrito = [];
-const divisa = "NIO";*/
-const divCarrito = document.querySelector(".home");
+const divCarrito = document.querySelector("#featured");
+const cartItems = document.querySelector(".cart__container");
+let totalPago = document.querySelector(".cart__prices-total");
+let counter = document.querySelector(".nav__shop-counter");
 
 loadEvents();
 
 function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
+
+    cartItems.addEventListener("click", borrarProducto);
 }
 
-function agregarProducto(e) {
-    console.log(e.target);
+function borrarProducto(e) {
+    let elemento = e.target;
+    if(elemento.classList.contains("cart__amount-trash")) {
+        const deleteProduct = e.target.getAttribute("id");
+        carrito.forEach(item => {
+            if(item.id == deleteProduct) {
+                //console.log(item.precio);
+                //console.log(parseFloat(item.cantidad));
+                let precioParse = item.precio.slice(1);
+                //console.log(precioParse);
+                let precioReducido = parseFloat(precioParse.slice(1)) * parseFloat(item.cantidad);
+                totalCard = totalCard + precioReducido;
+                totalCard = parseFloat(totalCard);
+                totalCard = totalCard.toFixed(2);
+                //console.log("TOTAL CARD: ", totalCard);
+                //totalCard = parseFloat(totalCard.toFixed(2));
+            }
+        });
+        carrito = carrito.filter(product => product.id !== deleteProduct);
+        counterTotal--;
+    }
+    cargarHTML();
 };
+
+
+function agregarProducto(e) {
+    let elemento = e.target;
+
+    if(elemento.classList.contains("featured__button")) {
+        let productoSelecionado = e.target.parentElement;
+        leerContenido(productoSelecionado);
+    }
+};
+
+
+function leerContenido(producto) {
+    const dataProducto = {
+        titulo: producto.querySelector(".featured__title").textContent,
+        imagen: producto.querySelector(".featured__img").src,
+        precio: producto.querySelector(".featured__price").textContent,
+        id: producto.querySelector("button").getAttribute("id"),
+        cantidad: 1
+    };
+
+    //console.log(totalCard);
+    let precioDespejado= dataProducto.precio.slice(1);
+    totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
+    //console.log(dataProducto.precio.slice(1)); //.substring(1)
+    totalCard = totalCard.toFixed(2);
+    //console.log(totalCard);
+    //console.log(parseFloat(totalCard) + parseFloat(dataProducto.precio));
+    //console.log("Total parseado: ", totalCard);
+
+    const existencia = carrito.some(product => product.id === dataProducto.id);
+    if(existencia) {
+        const p = carrito.map(producto => {
+            if(producto.id === dataProducto.id) {
+                producto.cantidad++;
+                return producto;
+            } else {
+                return producto;
+            }
+        });
+        carrito = [...p];
+    } else {
+        carrito = [...carrito, dataProducto];
+        counterTotal++;
+    }
+
+    cargarHTML();
+
+    console.log("producto seleccionado: ", dataProducto);
+    console.log("Carrito: ",carrito);
+};
+
+function cargarHTML() {
+    limpiarHTML();
+    carrito.forEach(product => {
+        console.log("carrito item: ", product);
+        const {titulo, imagen, precio, cantidad, id} = product;
+        const row = document.createElement("article");
+
+        row.classList.add("cart__card");
+        row.innerHTML = `
+            <div class="cart__box">
+                <img src="${imagen}" alt="" class="cart__img">
+            </div>
+
+            <div class="cart__details">
+                <h3 class="cart__title">${titulo}</h3>
+                <span class="cart__price">${precio}</span>
+
+                <div class="cart__amount">
+                    <div class="cart__amout-content">
+                        <span class="cart__amount-box">
+                            <i class='bx bx-minus' ></i>
+                        </span>
+
+                        <span class="cart__amoutn-number">${cantidad}</span>
+
+                        <span class="cart__amount-box">
+                            <i class='bx bx-plus' ></i>
+                        </span>
+                    </div>
+
+                    <i class='bx bx-trash-alt cart__amount-trash' id="${id}"></i>
+                </div>
+            </div>
+        `;
+
+        cartItems.appendChild(row);
+        console.log("TOTAL: ", totalCard);
+        totalPago.innerHTML = `$ ${parseFloat(totalCard)}`;
+        counter.innerHTML = counterTotal;
+    });
+};
+
+function limpiarHTML() {
+    cartItems.innerHTML = "";
+};
+

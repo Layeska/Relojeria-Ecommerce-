@@ -176,6 +176,12 @@ header {
 .nav__logo-icon {
   font-size: 1.25rem;
 }
+.nav__shop i {
+  position: relative;
+}
+.nav__shop-counter {
+  font-size: 15px;
+}
 .nav__btns {
   display: flex;
   align-items: center;
