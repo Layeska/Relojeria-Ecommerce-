@@ -31,6 +31,15 @@ header {
         }
     }
 
+    &__shop {        
+        & i {
+            position: relative;
+        }
+        &-counter {
+            font-size: 15px;
+        }
+    }
+
     &__btns {
         display: flex;
         align-items: center;
