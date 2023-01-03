@@ -734,6 +734,9 @@ header {
 .cart__container {
   display: grid;
   row-gap: 1.5rem;
+  overflow-y: scroll;
+  height: 310px;
+  overflow-x: hidden;
 }
 .cart__card {
   display: flex;
@@ -807,7 +810,10 @@ header {
   justify-content: center;
 }
 .cart__mensaje img {
-  width: 100px;
+  width: 250px;
+}
+.cart__mensaje-compra {
+  opacity: 0.5;
 }
 
 .show-cart {
