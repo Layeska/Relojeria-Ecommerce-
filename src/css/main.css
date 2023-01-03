@@ -796,6 +796,19 @@ header {
   font-size: var(--h3-font-size);
   font-weight: var(--font-medium);
 }
+.cart__pago {
+  width: 100%;
+  margin-top: var(--mb-1-5);
+}
+.cart__mensaje {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.cart__mensaje img {
+  width: 100px;
+}
 
 .show-cart {
   right: 0;

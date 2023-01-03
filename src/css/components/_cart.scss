@@ -99,7 +99,24 @@
             font-weight: var(--font-medium);
         }
     }
+
+    &__pago {
+        width: 100%;
+        margin-top: var(--mb-1-5);
+    }
+
+    &__mensaje {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        & img {
+            width: 100px;
+        }
+    }
 }
+
 
 .show-cart {
     right: 0;
