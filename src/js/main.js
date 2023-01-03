@@ -189,6 +189,7 @@ let totalItem = document.querySelector(".cart__prices-item");
 let counter = document.querySelector(".nav__shop-counter");
 
 const divNew = document.querySelector("#new");
+const divProducts = document.querySelector("#products");
 
 const mensaje = () => {
     let smsHTML = `
@@ -217,6 +218,7 @@ cargarHTML();
 function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
     divNew.addEventListener("click", agregarProducto);
+    divProducts.addEventListener("click", agregarProducto);
 
     cartItems.addEventListener("click", borrarProducto);
 }
@@ -260,8 +262,44 @@ function agregarProducto(e) {
     } else if(elemento.classList.contains("new__button")) {
         let productoSelecionado = e.target.parentElement;
         leerContenidoNew(productoSelecionado);
+    } else if(elemento.classList.contains("products__button")) {
+        let productoSelecionado = e.target.parentElement;
+        leerContenidoProduct(productoSelecionado);
     }
 };
+
+function leerContenidoProduct(producto) {
+    const dataProducto = {
+        titulo: producto.querySelector(".products__title").textContent,
+        imagen: producto.querySelector(".products__img").src,
+        precio: producto.querySelector(".products__price").textContent,
+        id: producto.querySelector(".products__button").getAttribute("id"),
+        cantidad: 1
+    };
+
+    let precioDespejado= dataProducto.precio.slice(1);
+    totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
+    totalCard = totalCard.toFixed(2);
+
+    const existencia = carrito.some(product => product.id === dataProducto.id);
+    if(existencia) {
+        const p = carrito.map(producto => {
+            if(producto.id === dataProducto.id) {
+                producto.cantidad++;
+                return producto;
+            } else {
+                return producto;
+            }
+        });
+        carrito = [...p];
+    } else {
+        carrito = [...carrito, dataProducto];
+        counterTotal++;
+    }
+
+    cargarHTML();
+};
+
 
 function leerContenidoNew(producto) {
     const dataProducto = {
