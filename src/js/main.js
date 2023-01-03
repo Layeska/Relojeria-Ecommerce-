@@ -188,23 +188,43 @@ let totalPago = document.querySelector(".cart__prices-total");
 let totalItem = document.querySelector(".cart__prices-item");
 let counter = document.querySelector(".nav__shop-counter");
 
-loadEvents();
+
+const mensaje = () => {
+    let smsHTML = `
+    <div class="cart__mensaje">
+        <h2>Su carrito está vacío 😓</h2>
+        <img src="src/img/carrito.png" alt="">
+    </div>
+    `;
+    return smsHTML;
+}
 
 const vacio = () => {
     if(counterTotal === 0) {
-        cartItems.innerHTML = "No hay productos en el carrito! 😓";
+        cartItems.innerHTML = mensaje();
+        totalCard = 0;
     }
 
     totalItem.innerHTML = `${counterTotal} productos`;
+    totalPago.innerHTML = `$ ${totalCard}`;
+    counter.innerHTML = counterTotal;
 };
 
-vacio();
+loadEvents();
+cargarHTML();
 
 function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
 
     cartItems.addEventListener("click", borrarProducto);
 }
+
+function vaciarCarrito() {
+    carrito = [];
+    totalCard = 0;
+    counterTotal = 0;
+    vacio();
+};
 
 function borrarProducto(e) {
     let elemento = e.target;
@@ -213,18 +233,23 @@ function borrarProducto(e) {
         carrito.forEach(item => {
             if(item.id == deleteProduct) {
                 let precioParse = item.precio.slice(1);
+                console.log("precioParse: ", precioParse);
 
-                let precioReducido = parseFloat(precioParse.slice(1)) * parseFloat(item.cantidad);
-                totalCard = totalCard + precioReducido;
+                let precioReducido = parseFloat(precioParse) * parseFloat(item.cantidad);
+                console.log("precioReducido: ", precioReducido);
+                totalCard = totalCard - precioReducido;
                 totalCard = parseFloat(totalCard);
                 totalCard = totalCard.toFixed(2);
+                console.log("PRECIO ACTUALIZADO: ", totalCard);
             }
         });
         carrito = carrito.filter(product => product.id !== deleteProduct);
+        
         counterTotal--;
     }
+
+    console.log("Borrado elemento -- Actualizado: ", totalCard);
     cargarHTML();
-    vacio();
 };
 
 
@@ -235,7 +260,8 @@ function agregarProducto(e) {
         let productoSelecionado = e.target.parentElement;
         leerContenido(productoSelecionado);
     }
-    vacio();
+
+    //console.log("Agregado elemento -- actualizado: ", totalCard);
 };
 
 
@@ -249,8 +275,10 @@ function leerContenido(producto) {
     };
 
     let precioDespejado= dataProducto.precio.slice(1);
+    console.log("precioDespejado: ", precioDespejado);
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
     totalCard = totalCard.toFixed(2);
+    console.log("total card en leerContendo: ", totalCard);
 
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
@@ -269,13 +297,11 @@ function leerContenido(producto) {
     }
 
     cargarHTML();
-
-    console.log("producto seleccionado: ", dataProducto);
-    console.log("Carrito: ",carrito);
 };
 
 function cargarHTML() {
     limpiarHTML();
+
     carrito.forEach(product => {
         console.log("carrito item: ", product);
         const {titulo, imagen, precio, cantidad, id} = product;
@@ -310,11 +336,12 @@ function cargarHTML() {
         `;
 
         cartItems.appendChild(row);
-        console.log("TOTAL: ", totalCard);
         totalPago.innerHTML = `$ ${parseFloat(totalCard)}`;
         counter.innerHTML = counterTotal;
         totalItem.innerHTML = `${counterTotal} productos`;
     });
+
+    vacio();
 };
 
 function limpiarHTML() {
