@@ -425,6 +425,7 @@ function leerContenido(producto) {
     cargarHTML();
 };
 
+
 function cargarHTML() {
     limpiarHTML();
 
@@ -444,15 +445,15 @@ function cargarHTML() {
 
                 <div class="cart__amount">
                     <div class="cart__amout-content">
-                        <span class="cart__amount-box">
+                        <span class="cart__amount-box" onclick="reduce(${cantidad}, ${precio.slice(1)}, ${id})">
                             <i class='bx bx-minus' ></i>
                         </span>
 
                         <span class="cart__amoutn-number">${cantidad}</span>
 
-                        <span class="cart__amount-box">
+                        <button class="cart__amount-box plus" onclick="plus(${cantidad}, ${precio.slice(1)}, ${id})">
                             <i class='bx bx-plus' ></i>
-                        </span>
+                        </button>
                     </div>
 
                     <i class='bx bx-trash-alt cart__amount-trash' id="${id}"></i>
@@ -464,6 +465,7 @@ function cargarHTML() {
         totalPago.innerHTML = `$ ${parseFloat(totalCard)}`;
         counter.innerHTML = counterTotal;
         totalItem.innerHTML = `${counterTotal} productos`;
+        //product.cantidad = copia;
     });
 
     vacio(mensaje);
@@ -473,3 +475,52 @@ function limpiarHTML() {
     cartItems.innerHTML = "";
 };
 
+let copia = 0;
+
+function plus(cantidad, precio, id) {
+    //let precioReducido = parseFloat(precio) * parseFloat(cantidad);
+    totalCard = parseFloat(precio) + parseFloat(totalCard);
+    totalCard = parseFloat(totalCard);
+    totalCard = totalCard.toFixed(2);
+    counterTotal++;
+    //cantidad++;
+    //copia = cantidad;
+    //console.log(copia);
+
+
+    const p = carrito.map(producto => {
+        if(Number(producto.id) === Number(id)) {
+            producto.cantidad++;
+            return producto;
+        } else {
+            return producto;
+        }
+    });
+
+    carrito = [...p];
+    console.log(p.cantidad);
+
+    console.log(carrito);
+}
+
+function reduce(cantidad, precio, id) {
+    let precioReducido = parseFloat(precio) * 1;
+    console.log(precioReducido);
+    totalCard = parseFloat(totalCard) - precioReducido;
+    counterTotal--;
+    //cantidad--;
+    //copia = cantidad;
+    const p = carrito.map(producto => {
+        if(Number(producto.id) === Number(id)) {
+            producto.cantidad--;
+            return producto;
+        } else {
+            return producto;
+        }
+    });
+
+    carrito = [...p];
+    console.log(p);
+
+    console.log(carrito);
+}
