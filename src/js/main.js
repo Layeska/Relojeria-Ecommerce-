@@ -188,6 +188,7 @@ let totalPago = document.querySelector(".cart__prices-total");
 let totalItem = document.querySelector(".cart__prices-item");
 let counter = document.querySelector(".nav__shop-counter");
 
+const divNew = document.querySelector("#new");
 
 const mensaje = () => {
     let smsHTML = `
@@ -215,6 +216,7 @@ cargarHTML();
 
 function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
+    divNew.addEventListener("click", agregarProducto);
 
     cartItems.addEventListener("click", borrarProducto);
 }
@@ -233,14 +235,11 @@ function borrarProducto(e) {
         carrito.forEach(item => {
             if(item.id == deleteProduct) {
                 let precioParse = item.precio.slice(1);
-                console.log("precioParse: ", precioParse);
 
                 let precioReducido = parseFloat(precioParse) * parseFloat(item.cantidad);
-                console.log("precioReducido: ", precioReducido);
                 totalCard = totalCard - precioReducido;
                 totalCard = parseFloat(totalCard);
                 totalCard = totalCard.toFixed(2);
-                console.log("PRECIO ACTUALIZADO: ", totalCard);
             }
         });
         carrito = carrito.filter(product => product.id !== deleteProduct);
@@ -248,7 +247,6 @@ function borrarProducto(e) {
         counterTotal--;
     }
 
-    console.log("Borrado elemento -- Actualizado: ", totalCard);
     cargarHTML();
 };
 
@@ -259,9 +257,42 @@ function agregarProducto(e) {
     if(elemento.classList.contains("featured__button")) {
         let productoSelecionado = e.target.parentElement;
         leerContenido(productoSelecionado);
+    } else if(elemento.classList.contains("new__button")) {
+        let productoSelecionado = e.target.parentElement;
+        leerContenidoNew(productoSelecionado);
+    }
+};
+
+function leerContenidoNew(producto) {
+    const dataProducto = {
+        titulo: producto.querySelector(".new__title").textContent,
+        imagen: producto.querySelector(".new__img").src,
+        precio: producto.querySelector(".new__price").textContent,
+        id: producto.querySelector("button").getAttribute("id"),
+        cantidad: 1
+    };
+
+    let precioDespejado= dataProducto.precio.slice(1);
+    totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
+    totalCard = totalCard.toFixed(2);
+
+    const existencia = carrito.some(product => product.id === dataProducto.id);
+    if(existencia) {
+        const p = carrito.map(producto => {
+            if(producto.id === dataProducto.id) {
+                producto.cantidad++;
+                return producto;
+            } else {
+                return producto;
+            }
+        });
+        carrito = [...p];
+    } else {
+        carrito = [...carrito, dataProducto];
+        counterTotal++;
     }
 
-    //console.log("Agregado elemento -- actualizado: ", totalCard);
+    cargarHTML();
 };
 
 
@@ -275,10 +306,8 @@ function leerContenido(producto) {
     };
 
     let precioDespejado= dataProducto.precio.slice(1);
-    console.log("precioDespejado: ", precioDespejado);
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
     totalCard = totalCard.toFixed(2);
-    console.log("total card en leerContendo: ", totalCard);
 
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
@@ -303,7 +332,6 @@ function cargarHTML() {
     limpiarHTML();
 
     carrito.forEach(product => {
-        console.log("carrito item: ", product);
         const {titulo, imagen, precio, cantidad, id} = product;
         const row = document.createElement("article");
 
