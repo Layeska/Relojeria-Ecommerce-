@@ -190,22 +190,42 @@ let counter = document.querySelector(".nav__shop-counter");
 
 const divNew = document.querySelector("#new");
 const divProducts = document.querySelector("#products");
+const home = document.querySelector(".home__button");
 
 const mensaje = () => {
     let smsHTML = `
     <div class="cart__mensaje">
         <h2>Su carrito está vacío 😓</h2>
-        <img src="src/img/carrito.png" alt="">
+        <img src="src/img/comprarC.png" alt="">
     </div>
     `;
+
     return smsHTML;
 }
 
-const vacio = () => {
+const mensaje2 = () => {
+    let smsHTML = `
+    <div class="cart__mensaje">
+        <img class="cart__mensaje-compra" src="src/img/comp.png" alt="">
+        <h2>Por tu compra! ♥</h2>
+    </div>
+    `;
+
+    return smsHTML;
+}
+
+function visible(opcion) {
+    let aux = document.querySelector(".cart__container");
+    opcion ? aux.style.overflowY = "scroll" : aux.style.overflowY = "hidden";
+}
+
+const vacio = (mensaje) => {
     if(counterTotal === 0) {
         cartItems.innerHTML = mensaje();
         totalCard = 0;
     }
+
+    visible(false);
 
     totalItem.innerHTML = `${counterTotal} productos`;
     totalPago.innerHTML = `$ ${totalCard}`;
@@ -219,6 +239,7 @@ function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
     divNew.addEventListener("click", agregarProducto);
     divProducts.addEventListener("click", agregarProducto);
+    home.addEventListener("click", agregarProducto);
 
     cartItems.addEventListener("click", borrarProducto);
 }
@@ -227,7 +248,7 @@ function vaciarCarrito() {
     carrito = [];
     totalCard = 0;
     counterTotal = 0;
-    vacio();
+    vacio(mensaje2);
 };
 
 function borrarProducto(e) {
@@ -265,8 +286,46 @@ function agregarProducto(e) {
     } else if(elemento.classList.contains("products__button")) {
         let productoSelecionado = e.target.parentElement;
         leerContenidoProduct(productoSelecionado);
+    } else if(elemento.classList.contains("home__button")) {
+        crearPedidoHome(e.target);
+    }
+
+    if(counterTotal >= 3) {
+        visible(true);
     }
 };
+
+function crearPedidoHome() {
+    const dataProducto = {
+        titulo: "COLLECTIONS B720",
+        imagen: "https://i.postimg.cc/59zYn9x4/home.png",
+        precio: "$1245",
+        id: 0,
+        cantidad: 1
+    };
+
+    let precioDespejado= dataProducto.precio.slice(1);
+    totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
+    totalCard = totalCard.toFixed(2);
+
+    const existencia = carrito.some(product => product.id === dataProducto.id);
+    if(existencia) {
+        const p = carrito.map(producto => {
+            if(producto.id === dataProducto.id) {
+                producto.cantidad++;
+                return producto;
+            } else {
+                return producto;
+            }
+        });
+        carrito = [...p];
+    } else {
+        carrito = [...carrito, dataProducto];
+        counterTotal++;
+    }
+
+    cargarHTML();
+}
 
 function leerContenidoProduct(producto) {
     const dataProducto = {
@@ -407,7 +466,7 @@ function cargarHTML() {
         totalItem.innerHTML = `${counterTotal} productos`;
     });
 
-    vacio();
+    vacio(mensaje);
 };
 
 function limpiarHTML() {
