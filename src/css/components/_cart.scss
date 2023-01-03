@@ -27,6 +27,9 @@
     &__container {
         display: grid;
         row-gap: 1.5rem;
+        overflow-y: scroll;
+        height: 310px;
+        overflow-x: hidden;
     }
 
     &__card {
@@ -112,7 +115,11 @@
         justify-content: center;
 
         & img {
-            width: 100px;
+            width: 250px;
+        }
+        
+        &-compra {
+            opacity: 0.5;
         }
     }
 }
