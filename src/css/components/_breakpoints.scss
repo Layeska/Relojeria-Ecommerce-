@@ -29,9 +29,21 @@
     }
 
     .products {
+        &__card {
+            height: 250px;
+        }
+
         &__container {
             grid-template-columns: repeat(1, 180px);
             justify-content: center;
+        }
+
+        &__button {
+            &:hover {
+                width: 100.2%;
+                margin-bottom: -0.2rem;
+                font-size: 1rem;
+            }
         }
     }
 
@@ -46,10 +58,6 @@
     }
 
     .details {
-        /*&__container {
-            flex-direction: column;
-        }*/
-
         &__product {
             width: 150px;
         }
@@ -89,10 +97,6 @@
     }
 
     .details {
-        /*&__container {
-            flex-direction: column;
-        }*/
-
         &__product {
             width: 160px;
         }
@@ -100,6 +104,19 @@
         &__content {
             &-description {
                 margin-top: -1.5rem;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 546px) {
+    .products {
+        &__card {
+            height: 250px;
+        }
+        &__button {
+            &:hover {
+                width: 100%;
             }
         }
     }
@@ -203,6 +220,13 @@
         &__img {
             height: 155px;
         }
+
+        &__button {
+            &:hover {
+                width: 100px;
+                transition: .3s;
+            }
+        }
     }
 
     .testimonial {
@@ -301,6 +325,17 @@
         &__container {
             padding-top: 2rem;
         }
+        
+        &__button {
+            width: 50px;
+            height: 30px;
+        
+            &:hover {
+                width: 60%;
+                transition: .3s;
+            }
+        }
+        
     }
 
     .testimonial {
@@ -363,6 +398,22 @@
         &__product {
             width: 200px;
             padding: 1rem;
+        }
+    }
+
+    .products {
+        &__button {
+            width: 40px;
+            height: 30px;
+    
+            & i {
+                color: #fff;
+            }
+    
+            &:hover {
+                width: 45%;
+                transition: .3s;
+            }
         }
     }
 }
