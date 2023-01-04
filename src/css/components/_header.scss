@@ -104,3 +104,68 @@ header {
 .active-link {
     color: var(--first-color);
 }
+
+.modal-overlay {
+    /*position: fixed;
+    top: 80px;
+    right: 80px;
+    width: 200px;
+    height: 100px;
+    background: rgba(73, 166, 233, 0.5);
+    display: grid;
+    place-items: center;
+    transition: var(--transition);
+    z-index: -10;
+    visibility: hidden;*/
+    position: fixed;
+    top: 50%;
+    left: 40%;
+    right: 0;
+    width: 300px;
+    height: 150px;
+    background: seagreen;
+    display: grid;
+    place-items: center;
+    z-index: 10;
+    visibility: hidden;
+}
+
+.open-modal {
+    visibility: visible;
+}
+
+.modal-container {
+    background: salmon;
+    display: grid;
+    place-items: center;
+    position: relative;
+    /*background: salmon;
+    border-radius: 10px;
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    position: relative;*/
+}
+
+.close-btn {
+    position: absolute;
+    top: -2.5rem;
+    right: 2rem;
+    background: transparent;
+    font-size: 1.5rem;
+    /*position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    background: transparent;
+    border-color: transparent;
+    color: rosybrown;
+    cursor: pointer;*/
+    
+}
+.close-btn:hover {
+    color: red;
+    transform: scale(1.3);
+}
