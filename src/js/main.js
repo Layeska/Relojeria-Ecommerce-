@@ -192,6 +192,20 @@ const divNew = document.querySelector("#new");
 const divProducts = document.querySelector("#products");
 const home = document.querySelector(".home__button");
 
+function crearStorage() {
+    localStorage.setItem("carritoStorage", JSON.stringify(carrito));
+    localStorage.setItem("contador", counterTotal);
+    localStorage.setItem("pago", totalCard);
+}
+
+//! Se crea el localStorage
+if(localStorage.getItem("contador")) {
+    console.log("existen");
+} else {
+    console.log("No existen, se crean");
+    crearStorage();
+}
+
 const mensaje = () => {
     let smsHTML = `
     <div class="cart__mensaje">
@@ -220,13 +234,15 @@ function visible(opcion) {
 }
 
 const vacio = (mensaje) => {
-    if(counterTotal === 0) {
+    if(localStorage.getItem("contador") == 0) {
         cartItems.innerHTML = mensaje();
         totalCard = 0;
     }
 
     visible(false);
 
+    counterTotal = localStorage.getItem("contador");
+    totalCard = localStorage.getItem("pago");
     totalItem.innerHTML = `${counterTotal} productos`;
     totalPago.innerHTML = `$ ${totalCard}`;
     counter.innerHTML = counterTotal;
@@ -255,22 +271,27 @@ function borrarProducto(e) {
     let elemento = e.target;
     if(elemento.classList.contains("cart__amount-trash")) {
         const deleteProduct = e.target.getAttribute("id");
+        carrito = JSON.parse(localStorage.getItem("carritoStorage"));
         carrito.forEach(item => {
             if(item.id == deleteProduct) {
+                console.log("eliminado: ", item);
                 let precioParse = item.precio.slice(1);
 
                 let precioReducido = parseFloat(precioParse) * parseFloat(item.cantidad);
                 totalCard = totalCard - precioReducido;
                 totalCard = parseFloat(totalCard);
                 totalCard = totalCard.toFixed(2);
+                crearStorage();
             }
         });
         carrito = carrito.filter(product => product.id !== deleteProduct);
-        
         counterTotal--;
+        localStorage.setItem("contador", counterTotal);
+        crearStorage();
     }
-
+    
     cargarHTML();
+    crearStorage();
 };
 
 
@@ -308,6 +329,7 @@ function crearPedidoHome() {
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
     totalCard = totalCard.toFixed(2);
 
+    carrito = JSON.parse(localStorage.getItem("carritoStorage"));
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
         const p = carrito.map(producto => {
@@ -319,12 +341,16 @@ function crearPedidoHome() {
             }
         });
         carrito = [...p];
+        crearStorage();
     } else {
         carrito = [...carrito, dataProducto];
         counterTotal++;
+        localStorage.setItem("contador", counterTotal);
+        crearStorage();
     }
 
     cargarHTML();
+    crearStorage();
 }
 
 function leerContenidoProduct(producto) {
@@ -340,6 +366,7 @@ function leerContenidoProduct(producto) {
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
     totalCard = totalCard.toFixed(2);
 
+    carrito = JSON.parse(localStorage.getItem("carritoStorage"));
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
         const p = carrito.map(producto => {
@@ -351,11 +378,15 @@ function leerContenidoProduct(producto) {
             }
         });
         carrito = [...p];
+        crearStorage();
     } else {
         carrito = [...carrito, dataProducto];
         counterTotal++;
+        localStorage.setItem("contador", counterTotal);
+        crearStorage();
     }
 
+    crearStorage();
     cargarHTML();
 };
 
@@ -373,6 +404,7 @@ function leerContenidoNew(producto) {
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
     totalCard = totalCard.toFixed(2);
 
+    carrito = JSON.parse(localStorage.getItem("carritoStorage"));
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
         const p = carrito.map(producto => {
@@ -384,12 +416,16 @@ function leerContenidoNew(producto) {
             }
         });
         carrito = [...p];
+        crearStorage();
     } else {
         carrito = [...carrito, dataProducto];
         counterTotal++;
+        localStorage.setItem("contador", counterTotal);
+        crearStorage();
     }
 
     cargarHTML();
+    crearStorage();
 };
 
 
@@ -406,6 +442,8 @@ function leerContenido(producto) {
     totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
     totalCard = totalCard.toFixed(2);
 
+
+    carrito = JSON.parse(localStorage.getItem("carritoStorage"));
     const existencia = carrito.some(product => product.id === dataProducto.id);
     if(existencia) {
         const p = carrito.map(producto => {
@@ -422,6 +460,7 @@ function leerContenido(producto) {
         counterTotal++;
     }
 
+    crearStorage();
     cargarHTML();
 };
 
@@ -429,10 +468,11 @@ function leerContenido(producto) {
 function cargarHTML() {
     limpiarHTML();
 
+    carrito = JSON.parse(localStorage.getItem("carritoStorage"));
+    console.log(carrito)
     carrito.forEach(product => {
         const {titulo, imagen, precio, cantidad, id} = product;
         const row = document.createElement("article");
-
         row.classList.add("cart__card");
         row.innerHTML = `
             <div class="cart__box">
@@ -463,11 +503,13 @@ function cargarHTML() {
 
         cartItems.appendChild(row);
         totalPago.innerHTML = `$ ${parseFloat(totalCard)}`;
+        counterTotal = localStorage.getItem("contador");
         counter.innerHTML = counterTotal;
         totalItem.innerHTML = `${counterTotal} productos`;
     });
 
     vacio(mensaje);
+    crearStorage();
 };
 
 function limpiarHTML() {
@@ -492,6 +534,7 @@ function plus(precio, id) {
     });
 
     carrito = [...p];
+    crearStorage();
 }
 
 function reduce(precio, id) {
@@ -510,6 +553,7 @@ function reduce(precio, id) {
     });
 
     carrito = [...p];
+    crearStorage();
 }
 
 
