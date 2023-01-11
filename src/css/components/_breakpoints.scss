@@ -134,7 +134,8 @@
     .nav {
         height: calc(var(--header-height) + 1.5rem);
         justify-content: initial;
-        column-gap: 3rem;
+        -moz-column-gap: 3rem;
+             column-gap: 3rem;
 
         &__toggle, &__close {
             display: none;
@@ -142,7 +143,8 @@
 
         &__list {
             flex-direction: row;
-            column-gap: 2.5rem;
+            -moz-column-gap: 2.5rem;
+                 column-gap: 2.5rem;
         }
 
         &__link {
@@ -158,6 +160,7 @@
     .home  {
         &__container {
             padding-top: 6rem;
+            grid-template-columns: 1fr -webkit-max-content;
             grid-template-columns: 1fr max-content;
             align-items: center;
         }
@@ -175,7 +178,8 @@
 
         &__social {
             top: 47%;
-            column-gap: 2rem;
+            -moz-column-gap: 2rem;
+                 column-gap: 2rem;
         }
     }
 
@@ -240,7 +244,8 @@
             grid-template-columns: repeat(2, 1fr);
             align-items: center;
             text-align: initial;
-            column-gap: 2rem;
+            -moz-column-gap: 2rem;
+                 column-gap: 2rem;
             padding: 4.5rem;
         }
 
@@ -261,6 +266,7 @@
 
     .footer {
         &__container {
+            grid-template-columns: repeat(4, -webkit-max-content);
             grid-template-columns: repeat(4, max-content);
             justify-content: space-between;
         }
@@ -280,7 +286,8 @@
 
     .home {
         &__container {
-            column-gap: 2rem;
+            -moz-column-gap: 2rem;
+                 column-gap: 2rem;
         }
 
         &__img {
@@ -309,7 +316,8 @@
 
     .story {
         &__container {
-            column-gap: 8rem;
+            -moz-column-gap: 8rem;
+                 column-gap: 8rem;
         }
 
         &__square, &__img {
@@ -340,7 +348,8 @@
 
     .testimonial {
         &__container {
-            column-gap: 8rem;
+            -moz-column-gap: 8rem;
+                 column-gap: 8rem;
             padding-bottom: 4rem;
             padding-top: 2rem;
         }
@@ -363,7 +372,8 @@
 
     .story {
         &__container {
-            column-gap: 13rem;
+            -moz-column-gap: 13rem;
+                 column-gap: 13rem;
             padding-top: 3rem;
         }
 
@@ -375,7 +385,8 @@
 
     .testimonial {
         &__container {
-            column-gap: 13rem;
+            -moz-column-gap: 13rem;
+                 column-gap: 13rem;
         }
 
         &__img {

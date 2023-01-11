@@ -24,7 +24,8 @@ header {
         letter-spacing: 1px;
         display: inline-flex;
         align-items: center;
-        column-gap: 0.25rem;
+        -moz-column-gap: 0.25rem;
+             column-gap: 0.25rem;
 
         &-icon {
         font-size: 1.25rem;
@@ -43,7 +44,8 @@ header {
     &__btns {
         display: flex;
         align-items: center;
-        column-gap: 1rem;
+        -moz-column-gap: 1rem;
+             column-gap: 1rem;
     }
 
     &__toggle, &__shop {

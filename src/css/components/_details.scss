@@ -19,7 +19,8 @@
         flex-direction: column;
         align-content: center;
         align-items: center;
-        column-gap: 2rem;
+        -moz-column-gap: 2rem;
+             column-gap: 2rem;
         
     }
 

@@ -190,7 +190,6 @@ let counter = document.querySelector(".nav__shop-counter");
 
 const divNew = document.querySelector("#new");
 const divProducts = document.querySelector("#products");
-const home = document.querySelector(".home__button");
 
 function crearStorage() {
     localStorage.setItem("carritoStorage", JSON.stringify(carrito));
@@ -243,6 +242,7 @@ const vacio = (mensaje) => {
 
     counterTotal = localStorage.getItem("contador");
     totalCard = localStorage.getItem("pago");
+    crearStorage();
     totalItem.innerHTML = `${counterTotal} productos`;
     totalPago.innerHTML = `$ ${totalCard}`;
     counter.innerHTML = counterTotal;
@@ -255,7 +255,6 @@ function loadEvents() {
     divCarrito.addEventListener("click", agregarProducto);
     divNew.addEventListener("click", agregarProducto);
     divProducts.addEventListener("click", agregarProducto);
-    home.addEventListener("click", agregarProducto);
 
     cartItems.addEventListener("click", borrarProducto);
 }
@@ -264,6 +263,7 @@ function vaciarCarrito() {
     carrito = [];
     totalCard = 0;
     counterTotal = 0;
+    crearStorage();
     vacio(mensaje2);
 };
 
@@ -289,7 +289,7 @@ function borrarProducto(e) {
         localStorage.setItem("contador", counterTotal);
         crearStorage();
     }
-    
+    localStorage.setItem("contador", counterTotal);
     cargarHTML();
     crearStorage();
 };
@@ -307,8 +307,6 @@ function agregarProducto(e) {
     } else if(elemento.classList.contains("products__button")) {
         let productoSelecionado = e.target.parentElement;
         leerContenidoProduct(productoSelecionado);
-    } else if(elemento.classList.contains("home__button")) {
-        crearPedidoHome(e.target);
     }
 
     if(counterTotal >= 3) {
@@ -316,42 +314,6 @@ function agregarProducto(e) {
     }
 };
 
-function crearPedidoHome() {
-    const dataProducto = {
-        titulo: "COLLECTIONS B720",
-        imagen: "https://i.postimg.cc/59zYn9x4/home.png",
-        precio: "$1245",
-        id: 0,
-        cantidad: 1
-    };
-
-    let precioDespejado= dataProducto.precio.slice(1);
-    totalCard = parseFloat(totalCard) + parseFloat(precioDespejado);
-    totalCard = totalCard.toFixed(2);
-
-    carrito = JSON.parse(localStorage.getItem("carritoStorage"));
-    const existencia = carrito.some(product => product.id === dataProducto.id);
-    if(existencia) {
-        const p = carrito.map(producto => {
-            if(producto.id === dataProducto.id) {
-                producto.cantidad++;
-                return producto;
-            } else {
-                return producto;
-            }
-        });
-        carrito = [...p];
-        crearStorage();
-    } else {
-        carrito = [...carrito, dataProducto];
-        counterTotal++;
-        localStorage.setItem("contador", counterTotal);
-        crearStorage();
-    }
-
-    cargarHTML();
-    crearStorage();
-}
 
 function leerContenidoProduct(producto) {
     const dataProducto = {
@@ -386,8 +348,8 @@ function leerContenidoProduct(producto) {
         crearStorage();
     }
 
-    crearStorage();
     cargarHTML();
+    crearStorage();
 };
 
 
@@ -455,9 +417,11 @@ function leerContenido(producto) {
             }
         });
         carrito = [...p];
+        localStorage.setItem("contador", counterTotal);
     } else {
         carrito = [...carrito, dataProducto];
         counterTotal++;
+        localStorage.setItem("contador", counterTotal);
     }
 
     crearStorage();
@@ -543,30 +507,26 @@ function reduce(precio, id) {
     totalCard = parseFloat(totalCard) - precioReducido;
     counterTotal--;
 
+    let aux = -1;
+
     const p = carrito.map(producto => {
         if(Number(producto.id) === Number(id)) {
             producto.cantidad--;
-            return producto;
+            if(producto.cantidad > 0) {
+                return producto;
+            } else {
+                aux = Number(producto.id);
+                console.log("----AUX----: ", aux);
+                return producto;
+            }
         } else {
             return producto;
         }
     });
 
+    
     carrito = [...p];
+    carrito = carrito.filter(product => product.id != aux);
+    aux = -1;
     crearStorage();
 }
-
-
-//------------------------------------------------------------------------------------------------
-//! Modal
-const modalBtn = document.querySelector(".modal-btn1");
-const modal = document.querySelector(".modal-overlay");
-const closeBtn = document.querySelector(".close-btn");
-
-modalBtn.addEventListener("click", function () {
-    modal.classList.add("open-modal");
-});
-
-closeBtn.addEventListener("click", function () {
-    modal.classList.remove("open-modal");
-});

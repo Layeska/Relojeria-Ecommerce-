@@ -25,7 +25,8 @@
     &__perfil {
         display: flex;
         align-items: center;
-        column-gap: 1rem;
+        -moz-column-gap: 1rem;
+             column-gap: 1rem;
         margin-bottom: 7rem;
 
         &-img {
