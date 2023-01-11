@@ -27,9 +27,8 @@
     &__container {
         display: grid;
         row-gap: 1.5rem;
+        height: 400px;
         overflow-y: scroll;
-        height: 310px;
-        overflow-x: hidden;
     }
 
     &__card {
