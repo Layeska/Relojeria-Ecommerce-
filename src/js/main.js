@@ -200,6 +200,12 @@ function loadEvents() {
 }
 
 function vaciarCarrito() {
+    if(counterTotal == 0 ){
+        const btnItem = document.querySelector(".cart__pago");
+        btnItem.desabled = true;
+        return 0;
+    }
+
     carrito = [];
     totalCard = 0;
     counterTotal = 0;
