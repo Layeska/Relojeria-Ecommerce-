@@ -740,9 +740,9 @@ header {
 }
 .cart__container {
   display: grid;
-  row-gap: 1.5rem;
-  height: 400px;
-  overflow-y: scroll;
+  row-gap: 0.5rem;
+  height: 340px;
+  margin-top: -2.2rem;
 }
 .cart__card {
   display: flex;
