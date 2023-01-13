@@ -109,7 +109,7 @@ if (selectedTheme) {
     themeButton.classList[selectedIcon === 'bx bx-moon' ? 'add' : 'remove'](iconTheme);
 }
 
-// Activate / deactivate the theme manually with the button
+//! Cambio de Tema manual (Oscuro/claro)
 themeButton.addEventListener('click', () => {
     document.body.classList.toggle(darkTheme);
     themeButton.classList.toggle(iconTheme);
@@ -121,62 +121,6 @@ themeButton.addEventListener('click', () => {
 //------------------------------------------------------------------------------------------------------------------------------------
 
 //! Logica del carrito de compras
-const base_datos = [
-    {
-        id: 1,
-        nombre: "Spirit Rose",
-        precio: 1500,
-        imagen: "https://i.postimg.cc/KYhs38v1/product1.png"
-    },
-    {
-        id: 2,
-        nombre: "Khaki pilot",
-        precio: 1350,
-        imagen: "https://i.postimg.cc/qMXtHmhW/product2.png"
-    },
-    {
-        id: 3,
-        nombre: "Jubilee black",
-        precio: 1350,
-        imagen: "https://i.postimg.cc/vmDD9bqd/product3.png"
-    },
-    {
-        id: 4,
-        nombre: "Fosil me3",
-        precio: 650,
-        imagen: "https://i.postimg.cc/GpNtxVVT/product4.png"
-    },
-    {
-        id: 5,
-        nombre: "Jazzmaster",
-        precio: 1050,
-        imagen: "https://i.postimg.cc/YCRmYXtQ/featured1.png"
-    },
-    {
-        id: 6,
-        nombre: "Rose Gold",
-        precio: 850,
-        imagen: "https://i.postimg.cc/XvvB8wvm/featured3.png"
-    },
-    {
-        id: 7,
-        nombre: "Longines Rose",
-        precio: 980,
-        imagen: "https://i.postimg.cc/8CnJnjJ5/new1.png"
-    },
-    {
-        id: 8,
-        nombre: "Ingersoll",
-        precio: 250,
-        imagen: "https://i.postimg.cc/sgshBFCV/featured2.png"
-    },
-    {
-        id: 9,
-        nombre: "Portuguese rose",
-        precio: 1590,
-        imagen: "https://i.postimg.cc/yx0Ddjfg/new4.png"
-    }
-];
 
 let carrito = [];
 let totalCard = 0;
@@ -198,17 +142,12 @@ function crearStorage() {
 }
 
 //! Se crea el localStorage
-if(localStorage.getItem("contador")) {
-    console.log("existen");
-} else {
-    console.log("No existen, se crean");
-    crearStorage();
-}
+localStorage.getItem("contador") ? 0 : crearStorage();
 
 const mensaje = () => {
     let smsHTML = `
     <div class="cart__mensaje">
-        <h2>Su carrito está vacío 😓</h2>
+        <h2>Empty Cart! 😓</h2>
         <img src="src/img/comprarC.png" alt="">
     </div>
     `;
@@ -220,7 +159,7 @@ const mensaje2 = () => {
     let smsHTML = `
     <div class="cart__mensaje">
         <img class="cart__mensaje-compra" src="src/img/comp.png" alt="">
-        <h2>Por tu compra! ♥</h2>
+        <h2>For Your Purchase! ❤️🛒 </h2>
     </div>
     `;
 
@@ -229,7 +168,7 @@ const mensaje2 = () => {
 
 function visible(opcion) {
     let aux = document.querySelector(".cart__container");
-    opcion ? aux.style.overflowY = "scroll" : aux.style.overflowY = "hidden";
+    return opcion ? aux.style.overflowY = "scroll" : aux.style.overflowY = "hidden";
 }
 
 const vacio = (mensaje) => {
@@ -238,12 +177,13 @@ const vacio = (mensaje) => {
         totalCard = 0;
     }
 
-    visible(false);
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
 
     counterTotal = localStorage.getItem("contador");
     totalCard = localStorage.getItem("pago");
     crearStorage();
-    totalItem.innerHTML = `${counterTotal} productos`;
+
+    totalItem.innerHTML = `${counterTotal} products`;
     totalPago.innerHTML = `$ ${totalCard}`;
     counter.innerHTML = counterTotal;
 };
@@ -263,35 +203,45 @@ function vaciarCarrito() {
     carrito = [];
     totalCard = 0;
     counterTotal = 0;
+    counter.innerHTML = 0;
+    totalPago.innerHTML = 0;
     crearStorage();
     vacio(mensaje2);
+    visible(false);
 };
 
 function borrarProducto(e) {
+    let cant = 0;
     let elemento = e.target;
+    //console.log("entra a borrar con: ", counterTotal);
+
     if(elemento.classList.contains("cart__amount-trash")) {
         const deleteProduct = e.target.getAttribute("id");
         carrito = JSON.parse(localStorage.getItem("carritoStorage"));
         carrito.forEach(item => {
             if(item.id == deleteProduct) {
-                console.log("eliminado: ", item);
+                //console.log("eliminado: ", item);
                 let precioParse = item.precio.slice(1);
 
                 let precioReducido = parseFloat(precioParse) * parseFloat(item.cantidad);
                 totalCard = totalCard - precioReducido;
                 totalCard = parseFloat(totalCard);
                 totalCard = totalCard.toFixed(2);
+                cant = item.cantidad;
                 crearStorage();
             }
         });
         carrito = carrito.filter(product => product.id !== deleteProduct);
-        counterTotal--;
-        localStorage.setItem("contador", counterTotal);
+        
         crearStorage();
     }
-    localStorage.setItem("contador", counterTotal);
-    cargarHTML();
+    counterTotal = counterTotal - cant;
+    //console.log("sale con", counterTotal);
     crearStorage();
+
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
+    cargarHTML();
+    totalItem.innerHTML = `${counterTotal} products`;
 };
 
 
@@ -309,9 +259,7 @@ function agregarProducto(e) {
         leerContenidoProduct(productoSelecionado);
     }
 
-    if(counterTotal >= 3) {
-        visible(true);
-    }
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
 };
 
 
@@ -348,6 +296,7 @@ function leerContenidoProduct(producto) {
         crearStorage();
     }
 
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
     cargarHTML();
     crearStorage();
 };
@@ -386,6 +335,7 @@ function leerContenidoNew(producto) {
         crearStorage();
     }
 
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
     cargarHTML();
     crearStorage();
 };
@@ -424,6 +374,8 @@ function leerContenido(producto) {
         localStorage.setItem("contador", counterTotal);
     }
 
+    localStorage.setItem("contador", counterTotal);
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
     crearStorage();
     cargarHTML();
 };
@@ -433,7 +385,6 @@ function cargarHTML() {
     limpiarHTML();
 
     carrito = JSON.parse(localStorage.getItem("carritoStorage"));
-    console.log(carrito)
     carrito.forEach(product => {
         const {titulo, imagen, precio, cantidad, id} = product;
         const row = document.createElement("article");
@@ -472,15 +423,15 @@ function cargarHTML() {
         totalItem.innerHTML = `${counterTotal} productos`;
     });
 
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
     vacio(mensaje);
     crearStorage();
 };
 
 function limpiarHTML() {
     cartItems.innerHTML = "";
+    visible(false);
 };
-
-let copia = 0;
 
 function plus(precio, id) {
     totalCard = parseFloat(precio) + parseFloat(totalCard);
@@ -499,24 +450,28 @@ function plus(precio, id) {
 
     carrito = [...p];
     crearStorage();
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
 }
 
 function reduce(precio, id) {
     let precioReducido = parseFloat(precio) * 1;
-    console.log(precioReducido);
+    //console.log(precioReducido);
     totalCard = parseFloat(totalCard) - precioReducido;
+    //console.log("\nentra a reduce con: ", counterTotal);
     counterTotal--;
 
     let aux = -1;
+    let cant = 0;
 
     const p = carrito.map(producto => {
         if(Number(producto.id) === Number(id)) {
             producto.cantidad--;
+            cant = producto.cantidad;
+
             if(producto.cantidad > 0) {
                 return producto;
             } else {
                 aux = Number(producto.id);
-                console.log("----AUX----: ", aux);
                 return producto;
             }
         } else {
@@ -524,9 +479,11 @@ function reduce(precio, id) {
         }
     });
 
+    //console.log("Sale con: ", counterTotal);
     
     carrito = [...p];
     carrito = carrito.filter(product => product.id != aux);
     aux = -1;
     crearStorage();
+    localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
 }
