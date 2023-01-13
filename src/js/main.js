@@ -219,14 +219,12 @@ function vaciarCarrito() {
 function borrarProducto(e) {
     let cant = 0;
     let elemento = e.target;
-    //console.log("entra a borrar con: ", counterTotal);
 
     if(elemento.classList.contains("cart__amount-trash")) {
         const deleteProduct = e.target.getAttribute("id");
         carrito = JSON.parse(localStorage.getItem("carritoStorage"));
         carrito.forEach(item => {
             if(item.id == deleteProduct) {
-                //console.log("eliminado: ", item);
                 let precioParse = item.precio.slice(1);
 
                 let precioReducido = parseFloat(precioParse) * parseFloat(item.cantidad);
@@ -242,7 +240,6 @@ function borrarProducto(e) {
         crearStorage();
     }
     counterTotal = counterTotal - cant;
-    //console.log("sale con", counterTotal);
     crearStorage();
 
     localStorage.getItem("contador") >= 3 ? visible(true) : visible(false);
@@ -461,9 +458,7 @@ function plus(precio, id) {
 
 function reduce(precio, id) {
     let precioReducido = parseFloat(precio) * 1;
-    //console.log(precioReducido);
     totalCard = parseFloat(totalCard) - precioReducido;
-    //console.log("\nentra a reduce con: ", counterTotal);
     counterTotal--;
 
     let aux = -1;
@@ -484,8 +479,6 @@ function reduce(precio, id) {
             return producto;
         }
     });
-
-    //console.log("Sale con: ", counterTotal);
     
     carrito = [...p];
     carrito = carrito.filter(product => product.id != aux);
